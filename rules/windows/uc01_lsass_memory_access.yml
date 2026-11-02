@@ -8,6 +8,7 @@ author: dimss113
 date: 2026-10-31
 tags:
   - attack.credential-access
+  - attack.defense-evasion
   - attack.t1003.001
 logsource:
   product: windows
