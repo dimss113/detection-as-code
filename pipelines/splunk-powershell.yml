@@ -1,0 +1,14 @@
+# The stock Splunk pipelines have no source for PowerShell script block logging (ps_script),
+# so without this the query would search every log.
+name: Splunk PowerShell script block source
+priority: 30
+transformations:
+  - id: ps_script_source
+    type: add_condition
+    conditions:
+      source: 'WinEventLog:Microsoft-Windows-PowerShell/Operational'
+      EventCode: 4104
+    rule_conditions:
+      - type: logsource
+        category: ps_script
+        product: windows

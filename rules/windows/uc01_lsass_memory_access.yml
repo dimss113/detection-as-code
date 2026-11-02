@@ -1,0 +1,31 @@
+title: LSASS Memory Access by Unexpected Process
+id: 6f0c3e0a-8f6e-4a77-9c1a-2a5d1b7c0001
+status: experimental
+description: A process opens LSASS with rights that allow reading its memory, a common step before dumping credentials.
+references:
+  - https://attack.mitre.org/techniques/T1003/001/
+author: dimss113
+date: 2026-10-31
+tags:
+  - attack.credential-access
+  - attack.t1003.001
+logsource:
+  product: windows
+  category: process_access
+detection:
+  selection:
+    TargetImage|endswith: '\lsass.exe'
+    GrantedAccess:
+      - '0x1010'
+      - '0x1410'
+      - '0x143a'
+      - '0x1438'
+      - '0x1fffff'
+  filter_system:
+    SourceImage|startswith:
+      - 'C:\Windows\System32\'
+      - 'C:\Program Files\'
+  condition: selection and not filter_system
+falsepositives:
+  - Security or backup software that reads LSASS memory
+level: high

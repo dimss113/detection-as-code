@@ -1,0 +1,76 @@
+---
+# Chainsaw mapping for the Sigma rules in rules/windows/.
+# Logs are tested as JSON (chainsaw dump --json), so samples and lab baselines share one format.
+# Each Sigma logsource is pinned to the exact Windows channel and event IDs it means,
+# so a rule can only match the events it was written for.
+name: detection-as-code Windows mapping
+kind: json
+rules: sigma
+
+extensions:
+  preconditions:
+    - for:
+        logsource.category: process_creation
+      filter:
+        - Channel: Microsoft-Windows-Sysmon/Operational
+          int(EventID): 1
+        - Channel: Security
+          int(EventID): 4688
+    - for:
+        logsource.category: process_access
+      filter:
+        Channel: Microsoft-Windows-Sysmon/Operational
+        int(EventID): 10
+    - for:
+        logsource.category: registry_set
+      filter:
+        Channel: Microsoft-Windows-Sysmon/Operational
+        int(EventID): 13
+    - for:
+        logsource.category: ps_script
+      filter:
+        Channel: Microsoft-Windows-PowerShell/Operational
+        int(EventID): 4104
+    - for:
+        logsource.service: security
+      filter:
+        Channel: Security
+    - for:
+        logsource.service: system
+      filter:
+        Channel: System
+
+groups:
+  - name: Sigma
+    timestamp: Event.System.TimeCreated_attributes.SystemTime
+    filter:
+      Channel: "*"
+    fields:
+      - name: Event ID
+        from: EventID
+        to: Event.System.EventID
+      - name: Computer
+        from: Computer
+        to: Event.System.Computer
+      - name: Event Data
+        from: EventData
+        to: Event.EventData
+      - {from: Channel, to: Event.System.Channel, visible: false}
+      - {from: Provider_Name, to: Event.System.Provider_attributes.Name, visible: false}
+      - {from: AuthenticationPackageName, to: Event.EventData.AuthenticationPackageName, visible: false}
+      - {from: CommandLine, to: Event.EventData.CommandLine, visible: false}
+      - {from: GrantedAccess, to: Event.EventData.GrantedAccess, visible: false}
+      - {from: Image, to: Event.EventData.Image, visible: false}
+      - {from: ImagePath, to: Event.EventData.ImagePath, visible: false}
+      - {from: LogonProcessName, to: Event.EventData.LogonProcessName, visible: false}
+      - {from: LogonType, to: Event.EventData.LogonType, visible: false}
+      - {from: OriginalFileName, to: Event.EventData.OriginalFileName, visible: false}
+      - {from: ParentImage, to: Event.EventData.ParentImage, visible: false}
+      - {from: Properties, to: Event.EventData.Properties, visible: false}
+      - {from: ScriptBlockText, to: Event.EventData.ScriptBlockText, visible: false}
+      - {from: ServiceName, to: Event.EventData.ServiceName, visible: false}
+      - {from: SourceImage, to: Event.EventData.SourceImage, visible: false}
+      - {from: SubjectUserName, to: Event.EventData.SubjectUserName, visible: false}
+      - {from: TargetImage, to: Event.EventData.TargetImage, visible: false}
+      - {from: TargetObject, to: Event.EventData.TargetObject, visible: false}
+      - {from: TargetSid, to: Event.EventData.TargetSid, visible: false}

@@ -1,0 +1,13 @@
+# Attack samples: EVTX-ATTACK-SAMPLES (GPL-3.0) at a pinned commit.
+# They are downloaded and checked by SHA-256 when the tests run, never committed here.
+samples:
+  repo: sbousseaden/EVTX-ATTACK-SAMPLES
+  commit: 4ceed2f4706daf601c212a8f91c113dd85349a2c
+
+# One entry per rule file in rules/ (file name without .yml).
+# positive: attack samples the rule must match. The lab baseline in baseline/ must never match.
+rules:
+  uc01_lsass_memory_access:
+    positive:
+      - path: Credential Access/sysmon_10_lsass_mimikatz_sekurlsa_logonpasswords.evtx
+        sha256: 9a1689574ed08c1fb18e7ff3f3bed612109aedcb7bf8efbf3537d756e669e96f
