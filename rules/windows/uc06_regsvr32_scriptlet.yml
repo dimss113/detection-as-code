@@ -1,0 +1,26 @@
+title: Regsvr32 Loading a Remote or Script Component (Squiblydoo)
+id: 6f0c3e0a-8f6e-4a77-9c1a-2a5d1b7c0006
+status: experimental
+description: Regsvr32 loads scrobj.dll with /i, which runs a script and bypasses application allowlisting. Matches renamed copies through OriginalFileName.
+references:
+  - https://attack.mitre.org/techniques/T1218/010/
+author: dimss113
+date: 2026-10-31
+tags:
+  - attack.stealth
+  - attack.t1218.010
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_image:
+    - Image|endswith: '\regsvr32.exe'
+    - OriginalFileName: 'REGSVR32.EXE'
+  selection_cli:
+    CommandLine|contains|all:
+      - '/i:'
+      - 'scrobj'
+  condition: all of selection_*
+falsepositives:
+  - Unlikely
+level: high

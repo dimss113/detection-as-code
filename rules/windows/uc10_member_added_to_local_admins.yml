@@ -1,0 +1,22 @@
+title: Member Added to Local Administrators Group
+id: 6f0c3e0a-8f6e-4a77-9c1a-2a5d1b7c0010
+status: experimental
+description: An account was added to the built-in Administrators group, a common persistence and privilege step.
+references:
+  - https://attack.mitre.org/techniques/T1098/
+author: dimss113
+date: 2026-10-31
+tags:
+  - attack.persistence
+  - attack.t1098
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4732
+    TargetSid: 'S-1-5-32-544'
+  condition: selection
+falsepositives:
+  - Approved admin changes; correlate with a change ticket
+level: medium

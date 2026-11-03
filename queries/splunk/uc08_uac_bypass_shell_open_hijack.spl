@@ -1,0 +1,1 @@
+source="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=13 TargetObject IN ("*\\mscfile\\shell\\open\\command*", "*\\ms-settings\\shell\\open\\command*", "*\\exefile\\shell\\open\\command*", "*\\Folder\\shell\\open\\command*")

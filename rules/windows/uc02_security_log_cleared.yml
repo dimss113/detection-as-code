@@ -1,0 +1,21 @@
+title: Security Event Log Cleared
+id: 6f0c3e0a-8f6e-4a77-9c1a-2a5d1b7c0002
+status: experimental
+description: The Security event log was cleared, which removes evidence of earlier activity.
+references:
+  - https://attack.mitre.org/techniques/T1685/005/
+author: dimss113
+date: 2026-10-31
+tags:
+  - attack.defense-impairment
+  - attack.t1685.005
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 1102
+  condition: selection
+falsepositives:
+  - Planned log maintenance, which should be rare and announced
+level: high

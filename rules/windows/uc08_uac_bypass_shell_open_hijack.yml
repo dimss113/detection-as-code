@@ -1,0 +1,25 @@
+title: UAC Bypass via Shell Open Command Hijack
+id: 6f0c3e0a-8f6e-4a77-9c1a-2a5d1b7c0008
+status: experimental
+description: A value is written under a per-user shell\open\command key used by auto-elevating binaries such as eventvwr.exe, fodhelper.exe or sdclt.exe.
+references:
+  - https://attack.mitre.org/techniques/T1548/002/
+author: dimss113
+date: 2026-10-31
+tags:
+  - attack.privilege-escalation
+  - attack.t1548.002
+logsource:
+  product: windows
+  category: registry_set
+detection:
+  selection:
+    TargetObject|contains:
+      - '\mscfile\shell\open\command'
+      - '\ms-settings\shell\open\command'
+      - '\exefile\shell\open\command'
+      - '\Folder\shell\open\command'
+  condition: selection
+falsepositives:
+  - Unlikely in user hives
+level: high
