@@ -1,0 +1,25 @@
+title: WMI Provider Host Spawns a Shell
+id: 6f0c3e0a-8f6e-4a77-9c1a-2a5d1b7c0007
+status: experimental
+description: WmiPrvSE.exe starts cmd or PowerShell, the pattern of remote command execution over WMI (wmiexec, wmic process call create).
+references:
+  - https://attack.mitre.org/techniques/T1047/
+author: dimss113
+date: 2026-10-31
+tags:
+  - attack.execution
+  - attack.t1047
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    ParentImage|endswith: '\WmiPrvSE.exe'
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\pwsh.exe'
+  condition: selection
+falsepositives:
+  - Management tools that run scripts through WMI
+level: high

@@ -19,6 +19,7 @@ CHAINSAW = Path(".tools/chainsaw")
 MAPPING = Path("mappings/chainsaw-sigma-windows.yml")
 RULES = Path("rules")
 CASES = Path("tests/cases.yml")
+DOCS = Path("docs/use-cases")
 BASELINE = Path("baseline")
 CACHE = Path(".cache")
 
@@ -58,11 +59,14 @@ def main() -> int:
     rules = {yaml.safe_load(p.read_text())["id"]: p.stem for p in sorted(RULES.rglob("*.yml"))}
     failures = []
 
-    # Every rule needs a test, and every test needs a rule.
+    # Every rule needs a test and a use case doc, and every test needs a rule.
     for stem in sorted(set(rules.values()) - set(cases["rules"])):
         failures.append(f"{stem}: rule has no entry in {CASES}")
     for stem in sorted(set(cases["rules"]) - set(rules.values())):
         failures.append(f"{stem}: test case has no rule file")
+    for stem in sorted(rules.values()):
+        if not (DOCS / f"{stem}.md").exists():
+            failures.append(f"{stem}: rule has no use case doc in {DOCS}")
 
     src = cases["samples"]
     expected = {}  # json path -> (rule stem, sample path)

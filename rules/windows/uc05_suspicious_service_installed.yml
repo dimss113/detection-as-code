@@ -1,0 +1,35 @@
+title: Service Installed with Command Shell or Remote Admin Share Path
+id: 6f0c3e0a-8f6e-4a77-9c1a-2a5d1b7c0005
+status: experimental
+description: A new service runs a command shell, PowerShell or a binary from an admin share, typical of PsExec-style remote execution.
+references:
+  - https://attack.mitre.org/techniques/T1569/002/
+  - https://attack.mitre.org/techniques/T1021/002/
+author: dimss113
+date: 2026-10-31
+tags:
+  - attack.execution
+  - attack.t1569.002
+  - attack.lateral-movement
+  - attack.t1021.002
+logsource:
+  product: windows
+  service: system
+detection:
+  selection_event:
+    Provider_Name: 'Service Control Manager'
+    EventID: 7045
+  selection_path:
+    - ImagePath|contains:
+        - 'cmd.exe'
+        - 'cmd /c'
+        - '%COMSPEC%'
+        - 'powershell'
+        - 'rundll32'
+        - '\ADMIN$\'
+        - '\C$\'
+    - ServiceName: 'PSEXESVC'
+  condition: selection_event and selection_path
+falsepositives:
+  - Software deployment tools that install services through admin shares
+level: high

@@ -1,0 +1,1 @@
+source="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1 Image="*\\regsvr32.exe" OR OriginalFileName="REGSVR32.EXE" CommandLine="*/i:*" CommandLine="*scrobj*"

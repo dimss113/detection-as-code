@@ -1,0 +1,27 @@
+title: Directory Replication Requested by Non-Computer Account (DCSync)
+id: 6f0c3e0a-8f6e-4a77-9c1a-2a5d1b7c0003
+status: experimental
+description: A user account requested directory replication rights, which lets it pull password hashes from a domain controller.
+references:
+  - https://attack.mitre.org/techniques/T1003/006/
+author: dimss113
+date: 2026-10-31
+tags:
+  - attack.credential-access
+  - attack.t1003.006
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4662
+    Properties|contains:
+      - '1131f6aa-9c07-11d1-f79f-00c04fc2dcd2'
+      - '1131f6ad-9c07-11d1-f79f-00c04fc2dcd2'
+      - '89e95b76-444d-4c62-991a-0facbeda640c'
+  filter_computer_accounts:
+    SubjectUserName|endswith: '$'
+  condition: selection and not filter_computer_accounts
+falsepositives:
+  - Azure AD Connect or other sync accounts that legitimately replicate
+level: critical
